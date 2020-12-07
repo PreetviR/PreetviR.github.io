@@ -27,7 +27,7 @@ var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 var dateTime = date
 
 // Calculates Time Spent on page upon switching windows
-
+/*
 setInterval((function() {
   if (document.hasFocus() === false) {
     _this.new_d = new Date();
@@ -36,7 +36,7 @@ setInterval((function() {
     _this.d = new Date();
   }
 }), 200);
-
+*/
 // Calculates Time Spent on page upon leaving/closing page
 
 window.onunload = function() {
