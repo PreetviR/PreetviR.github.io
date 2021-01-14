@@ -1,37 +1,90 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8" />
-    <title>Time Spent on Page</title>
-    <style type="text/css">
+	<title>Page Visibility Test</title>
+	<link rel="stylesheet" type="text/css" href="timeme.css">
+	<script src="timeme.min.js"></script>
+	<script type="text/javascript">
+		TimeMe.initialize({
+			currentPageName: "my-home-page", // current page
+			//idleTimeoutInSeconds: 5, // stop recording time due to inactivity
+			//websocketOptions: { // optional
+			//	websocketHost: "ws://your_host:your_port",
+			//	appId: "insert-your-made-up-app-id"
+			//}
+		});
 
-        body {
-          font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-          width: 400px;
-          margin: 50px auto;
-          color: #444;
-        }
+		TimeMe.callAfterTimeElapsedInSeconds(4, function () {
+			console.log("The user has been using the page for 4 seconds! Let's prompt them with something.");
+		});
 
-        h1 { font-weight: 400; }
-        li { margin: 1em 0; font-weight:300; }
+		TimeMe.callAfterTimeElapsedInSeconds(9, function () {
+			console.log("The user has been using the page for 9 seconds! Let's prompt them with something.");
+		});
 
-    </style>
+
+		window.onload = function () {
+			TimeMe.trackTimeOnElement('area-of-interest-1');
+			TimeMe.trackTimeOnElement('area-of-interest-2');
+			setInterval(function () {
+				let timeSpentOnPage = TimeMe.getTimeOnCurrentPageInSeconds();
+				document.getElementById('timeInSeconds').textContent = timeSpentOnPage.toFixed(2);
+
+				if (TimeMe.isUserCurrentlyOnPage && TimeMe.isUserCurrentlyIdle === false) {
+					document.getElementById('activityStatus').textContent = "Je bent actief op deze pagina."
+				} else {
+					document.getElementById('activityStatus').textContent = "Je bent niet meer actief op deze pagina."
+				}
+
+				let timeSpentOnElement = TimeMe.getTimeOnElementInSeconds('area-of-interest-1');
+				document.getElementById('area-of-interest-time-1').textContent = timeSpentOnElement.toFixed(2);
+
+				let timeSpentOnElement2 = TimeMe.getTimeOnElementInSeconds('area-of-interest-2');
+				document.getElementById('area-of-interest-time-2').textContent = timeSpentOnElement2.toFixed(2);
+
+			}, 37);
+		}
+	</script>
 </head>
+
 <body>
+	<div class="top-level-message">
+		<h1>Tijd Op Pagina</h1>
+		<h3>Tijd dat je nu op deze pagina bent is</h3>
+	</div>
+	<div class="time-message">
+		<h1>
+			<span id="timeInSeconds">0</span> <span>seconds</span>
+		</h1>
+		<h4 id="activityStatus">Je bent actief op deze pagina.</h4>
+	</div>
+	<div>
+		<h3>Uitleg</h3>
+		De timer boven volgt hoe lang je actief bent op deze pagina.
+		Wanneer je niet meer actief bent op deze pagina stopt hij met timen.
+	</div>
+	<div>
+		<h3>Specifiek</h3>
+		Verder kan het specifiek bijhouden hoe lang op welk element de muis zich bevind.
 
-    <h1>Time Spent on Page</h1>
-    <small>
-        Bij het verlaten van de pagina zal er komen te staan hoe lang de leerling op de pagina is geweest.<br>
-         Ter illustratie:<br>
-         <ul>
-            <li>Open een extra tabblad</li>
-            <li>Switch van tabblad</li>
-            <li>Onder staat de tijd die is doorgebracht op deze pagina</li>
-         </ul>
-    </small>
-    <a target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;"></a>
+		<br />
 
-    <script src="js/timeSpentOnPage.js"></script>
+		<div class="area-of-interest" id="area-of-interest-1">
+			Muis op dit element<br /><br />
+			Interactie: <span id="area-of-interest-time-1"></span> seconds.
+		</div>
 
+		<div class="area-of-interest" id="area-of-interest-2">
+			Muis op dit element<br /><br />
+			Interactie: <span id="area-of-interest-time-2"></span> seconds.
+		</div>
+	</div>
+	<div>
+		<h3>Opdrachten Driehoeken</h3>
+		Op deze manier houden wij precies bij hoelang een leerling over een vraag doet en hoe lang
+		hij zich op een hint pagina bevind.
+	</div>
+	<br /><br />
 </body>
+
 </html>
